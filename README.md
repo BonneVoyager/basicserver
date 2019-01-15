@@ -55,8 +55,8 @@ func main() {
 	api := app.Iris.Party("/api")
 	api.Use(app.RequireAuth())
 	{
-    api.Get("/profile", myApp.ServeProfileGet(app))
-    api.Post("/profile", myApp.ServeProfilePost(app))
+		api.Get("/profile", myApp.ServeProfileGet(app))
+		api.Post("/profile", myApp.ServeProfilePost(app))
 	}
 
 	app.Init()
@@ -65,20 +65,20 @@ func main() {
 
 ```
 
-In order to use basicserver, you need to at least provide `MongoString` and `ServerPort` [configuration options](https://github.com/bonnevoyager/blob/master/main.go#L21-L35) to `basicserver.CreateApp(settings)`.
+In order to use basicserver, you need to at least provide `MongoString` and `ServerPort` [configuration options](https://github.com/bonnevoyager/basicserver/blob/master/main.go#L21-L35) to `basicserver.CreateApp(settings)`.
 
-Preconfigured [routes](https://github.com/bonnevoyager/blob/master/routes.go#L17-L26) are:
+Preconfigured [routes](https://github.com/bonnevoyager/basicserver/blob/master/routes.go#L17-L26) are:
 
-- [POST /register](https://github.com/bonnevoyager/blob/master/register_post.go)
-- [POST /signin](https://github.com/bonnevoyager/blob/master/signin_post.go)
-- [POST /api/data](https://github.com/bonnevoyager/blob/master/data_post.go)
-- [POST /api/file](https://github.com/bonnevoyager/blob/master/file_post.go)
-- [GET /api/data](https://github.com/bonnevoyager/blob/master/data_get.go)
-- [GET /api/file/{id:string}](https://github.com/bonnevoyager/blob/master/file_get.go)
+- [POST /register](https://github.com/bonnevoyager/basicserver/blob/master/register_post.go)
+- [POST /signin](https://github.com/bonnevoyager/basicserver/blob/master/signin_post.go)
+- [POST /api/data](https://github.com/bonnevoyager/basicserver/blob/master/data_post.go)
+- [POST /api/file](https://github.com/bonnevoyager/basicserver/blob/master/file_post.go)
+- [GET /api/data](https://github.com/bonnevoyager/basicserver/blob/master/data_get.go)
+- [GET /api/file/{id:string}](https://github.com/bonnevoyager/basicserver/blob/master/file_get.go)
 
 You can add additional routes as in the example above, by adding more handlers.
 
-In case you need user authorization, you can use [app.RequireAuth()](https://github.com/bonnevoyager/blob/master/require_auth.go).
+In case you need user authorization, you can use [app.RequireAuth()](https://github.com/bonnevoyager/basicserver/blob/master/require_auth.go).
 
 ## Testing
 
