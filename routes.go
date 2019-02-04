@@ -8,6 +8,7 @@ import (
 //
 //    `POST /register` serves for user registration
 //    `POST /signin` serves for user login
+//    `GET /keepalive` serves to refresh jwt token
 //    `POST /api/data` serves to update user state
 //    `POST /api/file` serves to upload user file
 //    `GET /api/data` serves to get user data
@@ -20,6 +21,8 @@ import (
 func (app *BasicApp) Init() {
 	app.Iris.Post("/register", app.ServeRegisterPost())
 	app.Iris.Post("/signin", app.ServeSigninPost())
+
+	app.Iris.Get("/keepalive", app.RequireAuth(), app.ServeKeepAliveGet())
 
 	api := app.Iris.Party("/api")
 	api.Use(app.RequireAuth())

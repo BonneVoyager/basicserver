@@ -130,6 +130,17 @@ func TestSigninPost(t *testing.T) {
 		Expect().Status(httptest.StatusUnauthorized).
 		Body().Equal("Incorrect Credentials")
 
+	// keepalive GET request with incorrect token
+	e.GET("/keepalive").
+		WithHeader("Authorization", "Bearer falseToken").
+		Expect().Status(httptest.StatusUnauthorized)
+
+	// keepalive GET request with correct token
+	token := createTestToken()
+	e.GET("/keepalive").
+		WithHeader("Authorization", "Bearer "+token).
+		Expect().Status(httptest.StatusOK)
+
 	removeTestUser()
 }
 
