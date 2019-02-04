@@ -75,6 +75,8 @@ Preconfigured [routes](https://github.com/bonnevoyager/basicserver/blob/master/r
 - [POST /api/file](https://github.com/bonnevoyager/basicserver/blob/master/file_post.go)
 - [GET /api/data](https://github.com/bonnevoyager/basicserver/blob/master/data_get.go)
 - [GET /api/file/{id:string}](https://github.com/bonnevoyager/basicserver/blob/master/file_get.go)
+- [DELETE /api/data](https://github.com/bonnevoyager/basicserver/blob/master/data_delete.go)
+- [DELETE /api/file](https://github.com/bonnevoyager/basicserver/blob/master/file_delete.go)
 
 You can add additional routes as in the example above, by adding more handlers.
 

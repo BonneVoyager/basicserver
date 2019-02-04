@@ -12,6 +12,7 @@ import (
 //
 // This resource requires `Authorization` header, e.g.:
 //
+//    Content-Type: multipart/form-data
 //    Authorization: Bearer {token}
 //
 // In order to store a file, a POST request to /api/file resource need to be send as
@@ -50,7 +51,5 @@ func (app *BasicApp) ServeFilePost() iris.Handler {
 			app.HandleError(err, ctx, iris.StatusInternalServerError)
 			return
 		}
-
-		ctx.StatusCode(iris.StatusOK)
 	}
 }

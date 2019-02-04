@@ -37,7 +37,11 @@ var app = CreateApp(settings)
 func createTestUser() {
 	passByte := []byte(testPassword)
 	encryptedPassword, _ := bcrypt.GenerateFromPassword(passByte, bcrypt.DefaultCost)
-	app.Coll.Users.Insert(bson.M{"_id": testUID, "email": testEmail, "password": encryptedPassword})
+	app.Coll.Users.Insert(bson.M{
+		"_id":      testUID,
+		"email":    testEmail,
+		"password": encryptedPassword,
+	})
 }
 
 func removeTestUser() {
@@ -67,19 +71,28 @@ func TestRegisterPost(t *testing.T) {
 
 	// wrong email
 	e.POST("/register").
-		WithJSON(bson.M{"email": "wrongEmail.com", "password": testPassword}).
+		WithJSON(bson.M{
+			"email":    "wrongEmail.com",
+			"password": testPassword,
+		}).
 		Expect().Status(httptest.StatusBadRequest).
 		Body().Equal("Incorrect Email")
 
 	// correct registration
 	e.POST("/register").
-		WithJSON(bson.M{"email": testEmail, "password": testPassword}).
+		WithJSON(bson.M{
+			"email":    testEmail,
+			"password": testPassword,
+		}).
 		Expect().Status(iris.StatusOK).
 		NoContent()
 
 	// taken email
 	e.POST("/register").
-		WithJSON(bson.M{"email": testEmail, "password": testPassword}).
+		WithJSON(bson.M{
+			"email":    testEmail,
+			"password": testPassword,
+		}).
 		Expect().Status(iris.StatusBadRequest).
 		Body().Equal("Email Taken")
 
@@ -93,18 +106,27 @@ func TestSigninPost(t *testing.T) {
 
 	// correct credentials
 	e.POST("/signin").
-		WithJSON(bson.M{"email": testEmail, "password": testPassword}).
+		WithJSON(bson.M{
+			"email":    testEmail,
+			"password": testPassword,
+		}).
 		Expect().Status(httptest.StatusOK)
 
 	// non existing
 	e.POST("/signin").
-		WithJSON(bson.M{"email": testEmail + "-NOPE", "password": testPassword}).
+		WithJSON(bson.M{
+			"email":    testEmail + "-NOPE",
+			"password": testPassword,
+		}).
 		Expect().Status(httptest.StatusUnauthorized).
 		Body().Equal("No Such User")
 
 	// incorrect credentials
 	e.POST("/signin").
-		WithJSON(bson.M{"email": testEmail, "password": testPassword + "-nope"}).
+		WithJSON(bson.M{
+			"email":    testEmail,
+			"password": testPassword + "-nope",
+		}).
 		Expect().Status(httptest.StatusUnauthorized).
 		Body().Equal("Incorrect Credentials")
 
@@ -126,7 +148,10 @@ func TestApiData(t *testing.T) {
 	// correct POST request
 	e.POST("/api/data").
 		WithHeader("Authorization", "Bearer "+token).
-		WithJSON(bson.M{"foo": "bar"}).
+		WithJSON(bson.M{
+			"foo": "bar",
+			"bar": "foo",
+		}).
 		Expect().Status(httptest.StatusOK)
 
 	// GET request with incorrect token
@@ -138,7 +163,33 @@ func TestApiData(t *testing.T) {
 	e.GET("/api/data").
 		WithHeader("Authorization", "Bearer "+token).
 		Expect().Status(httptest.StatusOK).
-		JSON().Equal(bson.M{"foo": "bar"})
+		JSON().Equal(bson.M{
+		"foo": "bar",
+		"bar": "foo",
+	})
+
+	// test DELETE requests
+	e.DELETE("/api/data").
+		WithHeader("Authorization", "Bearer "+token).
+		WithJSON([1]string{"bar"}).
+		Expect().Status(httptest.StatusOK)
+
+	e.GET("/api/data").
+		WithHeader("Authorization", "Bearer "+token).
+		Expect().Status(httptest.StatusOK).
+		JSON().Equal(bson.M{
+		"foo": "bar",
+	})
+
+	e.DELETE("/api/data").
+		WithHeader("Authorization", "Bearer "+token).
+		WithJSON(true).
+		Expect().Status(httptest.StatusOK)
+
+	e.GET("/api/data").
+		WithHeader("Authorization", "Bearer "+token).
+		Expect().Status(httptest.StatusOK).
+		JSON().Equal(nil)
 
 	removeTestUser()
 	removeTestState()
@@ -179,6 +230,18 @@ func TestApiFile(t *testing.T) {
 		WithHeader("Authorization", "Bearer "+token).
 		Expect().Status(httptest.StatusOK).
 		ContentType("image/jpeg")
+
+	// test DELETE requests
+	e.DELETE("/api/file").
+		WithHeader("Authorization", "Bearer "+token).
+		WithJSON(bson.M{
+			"name": "golang.jpg",
+		}).
+		Expect().Status(httptest.StatusOK)
+
+	e.GET("/api/file/golang.jpg").
+		WithHeader("Authorization", "Bearer "+token).
+		Expect().Status(httptest.StatusUnauthorized)
 
 	removeTestUser()
 	removeTestState()

@@ -11,13 +11,17 @@ import (
 )
 
 type signinInput struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email    string `bson:"email"`
+	Password string `bson:"password"`
 }
 
 // ServeSigninPost serves
 // Method:   POST
 // Resource: http://localhost/signin
+//
+// This resource requires `Content-Type` header, e.g.:
+//
+//    Content-Type: application/json
 //
 // Sample request to be `POST`ed to the /signin resource as `application/json`:
 //

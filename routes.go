@@ -12,8 +12,10 @@ import (
 //    `POST /api/file` serves to upload user file
 //    `GET /api/data` serves to get user data
 //    `GET /api/file/{id:string}` serves to get user file
+//    `DELETE /api/data` serves to delete user data
+//    `DELETE /api/file` serves to delete user file
 //
-// Check Serve* functions for more details about specific handlers.
+// Check BasicApp.Serve* functions for more details about specific handlers.
 //
 func (app *BasicApp) Init() {
 	app.Iris.Post("/register", app.ServeRegisterPost())
@@ -26,6 +28,8 @@ func (app *BasicApp) Init() {
 		api.Post("/file", app.ServeFilePost())
 		api.Get("/data", app.ServeDataGet())
 		api.Get("/file/{id:string}", app.ServeFileGet())
+		api.Delete("/data", app.ServeDataDelete())
+		api.Delete("/file", app.ServeFileDelete())
 	}
 }
 
