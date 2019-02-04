@@ -3,6 +3,7 @@ package basicserver
 import (
 	"errors"
 	"regexp"
+	"time"
 
 	"golang.org/x/crypto/bcrypt"
 
@@ -11,8 +12,9 @@ import (
 )
 
 type registerInput struct {
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Email     string    `bson:"email"`
+	Password  string    `bson:"password"`
+	CreatedAt time.Time `bson:"created_at"`
 }
 
 var (
@@ -22,6 +24,10 @@ var (
 // ServeRegisterPost serves:
 // Method:   POST
 // Resource: http://localhost/register
+//
+// This resource requires `Content-Type` header, e.g.:
+//
+//    Content-Type: application/json
 //
 // Sample request to be `POST`ed to the /register resource as `application/json`:
 //
@@ -69,6 +75,7 @@ func (app *BasicApp) ServeRegisterPost() iris.Handler {
 		}
 
 		input.Password = string(passEnc)
+		input.CreatedAt = time.Now()
 		err = app.Coll.Users.Insert(input)
 		if err != nil {
 			app.HandleError(err, ctx, iris.StatusInternalServerError)

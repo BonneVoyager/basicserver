@@ -67,7 +67,7 @@ func main() {
 
 In order to use basicserver, you need to at least provide `MongoString` and `ServerPort` [configuration options](https://github.com/bonnevoyager/basicserver/blob/master/main.go#L21-L35) to `basicserver.CreateApp(settings)`.
 
-Preconfigured [routes](https://github.com/bonnevoyager/basicserver/blob/master/routes.go#L17-L26) are:
+Preconfigured [routes](https://github.com/bonnevoyager/basicserver/blob/master/routes.go#L7-L17) are:
 
 - [POST /register](https://github.com/bonnevoyager/basicserver/blob/master/register_post.go)
 - [POST /signin](https://github.com/bonnevoyager/basicserver/blob/master/signin_post.go)
@@ -79,6 +79,8 @@ Preconfigured [routes](https://github.com/bonnevoyager/basicserver/blob/master/r
 You can add additional routes as in the example above, by adding more handlers.
 
 In case you need user authorization, you can use [app.RequireAuth()](https://github.com/bonnevoyager/basicserver/blob/master/require_auth.go).
+
+[Godoc link](https://godoc.org/github.com/BonneVoyager/basicserver).
 
 ## Testing
 

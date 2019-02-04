@@ -1,6 +1,8 @@
 package basicserver
 
 import (
+	"time"
+
 	"github.com/globalsign/mgo/bson"
 	"github.com/kataras/iris"
 )
@@ -11,6 +13,7 @@ import (
 //
 // This resource requires `Authorization` header, e.g.:
 //
+//		Content-Type: application/json
 //		Authorization: Bearer {token}
 //
 // Sample request to be `POST`ed to the /api/data resource as `application/json`:
@@ -44,6 +47,7 @@ func (app *BasicApp) ServeDataPost() iris.Handler {
 		for key, value := range input {
 			parsedInput["data."+key] = value
 		}
+		parsedInput["updated_at"] = time.Now()
 
 		_, err = app.Coll.States.UpsertId(objectUID, bson.M{"$set": parsedInput})
 		if err != nil {
