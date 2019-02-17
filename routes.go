@@ -23,6 +23,7 @@ func (app *BasicApp) Init() {
 	app.Iris.Post("/signin", app.ServeSigninPost())
 
 	app.Iris.Get("/keepalive", app.RequireAuth(), app.ServeKeepAliveGet())
+	app.Iris.Delete("/account", app.RequireAuth(), app.ServeRemoveAccountDelete())
 
 	api := app.Iris.Party("/api")
 	api.Use(app.RequireAuth())

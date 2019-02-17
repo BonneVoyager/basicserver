@@ -141,7 +141,16 @@ func TestSigninPost(t *testing.T) {
 		WithHeader("Authorization", "Bearer "+token).
 		Expect().Status(httptest.StatusOK)
 
-	removeTestUser()
+	// account DELETE requests
+	e.DELETE("/account").
+		WithHeader("Authorization", "Bearer "+token).
+		Expect().Status(httptest.StatusOK)
+
+	// account should not exist anymore
+	e.GET("/keepalive").
+		WithHeader("Authorization", "Bearer "+token).
+		Expect().Status(httptest.StatusUnauthorized).
+		Body().Equal("No Such User")
 }
 
 func TestApiData(t *testing.T) {

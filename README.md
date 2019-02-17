@@ -71,6 +71,7 @@ Preconfigured [routes](https://github.com/bonnevoyager/basicserver/blob/master/r
 
 - [POST /register](https://github.com/bonnevoyager/basicserver/blob/master/register_post.go)
 - [POST /signin](https://github.com/bonnevoyager/basicserver/blob/master/signin_post.go)
+- [DELETE /account](https://github.com/bonnevoyager/basicserver/blob/master/account_delete.go)
 - [GET /keepalive](https://github.com/bonnevoyager/basicserver/blob/master/keepalive_get.go)
 - [POST /api/data](https://github.com/bonnevoyager/basicserver/blob/master/data_post.go)
 - [POST /api/file](https://github.com/bonnevoyager/basicserver/blob/master/file_post.go)
