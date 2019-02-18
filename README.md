@@ -9,12 +9,13 @@ basicserver is a preconfigured [Iris based](https://iris-go.com/) web server wit
 .env
 
 ```ini
-MONGO=mongodb://127.0.0.1:27017/keosity
+MONGO=mongodb://127.0.0.1:27017/project
 PORT=8081
 SECRET=mySecretKey
 LOG_LEVEL=info
-SMTP_URL=smtp.gmail.com:587
-SMTP_FROM=...@gmail.com
+SMTP_URL=smtp.gmail.com
+SMTP_PORT=587
+SMTP_USER=...@gmail.com
 SMTP_PASS=...
 ```
 
@@ -40,11 +41,24 @@ func getSettings() *basicserver.Settings {
 	serverPort := os.Getenv("PORT")
 	logLevel := os.Getenv("LOG_LEVEL")
 
+	smtpURL := os.Getenv("SMTP_URL")
+	smtpPort, _ := strconv.Atoi(os.Getenv("SMTP_PORT"))
+	smtpUser := os.Getenv("SMTP_USER")
+	smtpPass := os.Getenv("SMTP_PASS")
+
+	SMTPSettings := &basicserver.SMTPSettings{
+		URL:  smtpURL,
+		Port: smtpPort,
+		User: smtpUser,
+		Pass: smtpPass,
+	}
+
 	return &basicserver.Settings{
 		Secret:      []byte(secret),
 		MongoString: mongoString,
 		ServerPort:  serverPort,
 		LogLevel:    logLevel,
+		SMTP:        *SMTPSettings,
 	}
 }
 
