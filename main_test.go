@@ -153,6 +153,46 @@ func TestSigninPost(t *testing.T) {
 		Body().Equal("No Such User")
 }
 
+func TestPasswordRecovery(t *testing.T) {
+	e := httptest.New(t, app.Iris)
+
+	createTestUser()
+
+	// POST request to generate recovery code
+	e.POST("/recover").
+		WithJSON(bson.M{"email": testEmail}).
+		Expect().Status(httptest.StatusOK).
+		Body().Equal("SMTP account not configured.")
+
+	var user User
+	_ = app.Coll.Users.Find(bson.M{"email": testEmail}).One(&user)
+
+	// PUT request without providing password field
+	e.POST("/change").
+		WithJSON(bson.M{
+			"code": user.RecoveryCode,
+		}).
+		Expect().Status(httptest.StatusBadRequest)
+
+	// PUT request with password field
+	e.POST("/change").
+		WithJSON(bson.M{
+			"code":     user.RecoveryCode,
+			"password": testPassword + "-new",
+		}).
+		Expect().Status(httptest.StatusOK)
+
+	// correct credentials
+	e.POST("/signin").
+		WithJSON(bson.M{
+			"email":    testEmail,
+			"password": testPassword + "-new",
+		}).
+		Expect().Status(httptest.StatusOK)
+
+	removeTestUser()
+}
+
 func TestApiData(t *testing.T) {
 	e := httptest.New(t, app.Iris)
 

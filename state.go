@@ -9,5 +9,5 @@ import "github.com/globalsign/mgo/bson"
 //
 type State struct {
 	ID   bson.ObjectId `bson:"_id" json:"id"`
-	Data bson.M        `bson:"data" json:"data"`
+	Data bson.M        `bson:"data"`
 }

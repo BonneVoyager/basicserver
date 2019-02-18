@@ -8,6 +8,9 @@ import (
 //
 //    `POST /register` serves for user registration
 //    `POST /signin` serves for user login
+//    `GET /recover` serves for password recovery form
+//    `POST /recover` serves for password recovery request
+//    `POST /change` serves for password recovery update
 //    `GET /keepalive` serves to refresh jwt token
 //    `POST /api/data` serves to update user state
 //    `POST /api/file` serves to upload user file
@@ -19,12 +22,22 @@ import (
 // Check BasicApp.Serve* functions for more details about specific handlers.
 //
 func (app *BasicApp) Init() {
+	// register & signin
 	app.Iris.Post("/register", app.ServeRegisterPost())
 	app.Iris.Post("/signin", app.ServeSigninPost())
 
+	// password recovery
+	app.Iris.Get("/recover", app.ServeRecoverPasswordGet(""))
+	app.Iris.Get("/recover/{code:string}", app.ServeRecoverPasswordGet("code"))
+	app.Iris.Get("/recover/done", app.ServeRecoverPasswordGet("done"))
+	app.Iris.Post("/recover", app.ServeRecoverPasswordPost())
+	app.Iris.Post("/change", app.ServeChangePasswordPut())
+
+	// account
 	app.Iris.Get("/keepalive", app.RequireAuth(), app.ServeKeepAliveGet())
 	app.Iris.Delete("/account", app.RequireAuth(), app.ServeRemoveAccountDelete())
 
+	// api
 	api := app.Iris.Party("/api")
 	api.Use(app.RequireAuth())
 	{

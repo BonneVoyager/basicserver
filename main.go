@@ -18,6 +18,14 @@ type collections struct {
 	Files  *mgo.GridFS
 }
 
+// SMTPSettings values are used by BasicApp to send emails.
+type SMTPSettings struct {
+	URL  string
+	Port int
+	User string
+	Pass string
+}
+
 // Settings values are used by BasicApp. At least `MongoString` and `ServerPort` are required.
 //
 //  Following values are possible:
@@ -26,12 +34,16 @@ type collections struct {
 //   `MongoString` - URI format described at http://docs.mongodb.org/manual/reference/connection-string/
 //   `Secret` - secret value used by JWT parser
 //   `ServerPort` - port on which the server should listen to
+//   `RecoverTemplate` - html content to be sent along with password recovery email
+//   `SMTP` - SMTP configuration to send emails
 //
 type Settings struct {
-	LogLevel    string
-	MongoString string
-	Secret      []byte
-	ServerPort  string
+	LogLevel        string
+	MongoString     string
+	Secret          []byte
+	ServerPort      string
+	RecoverTemplate string
+	SMTP            SMTPSettings
 }
 
 // BasicApp contains following fields:

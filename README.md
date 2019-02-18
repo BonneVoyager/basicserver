@@ -2,7 +2,7 @@
 
 ## What is this
 
-basicserver is a preconfigured [Iris based](https://iris-go.com/) web server with simple user authentication (using [JWT](https://jwt.io/) token) and storage (based on [MongoDB](https://www.mongodb.com/)).
+basicserver is a preconfigured [Iris based](https://iris-go.com/) web server with user authentication (using [JWT](https://jwt.io/) token) and key/values+files storage (based on [MongoDB](https://www.mongodb.com/)).
 
 ## Examples usage
 
@@ -13,6 +13,9 @@ MONGO=mongodb://127.0.0.1:27017/keosity
 PORT=8081
 SECRET=mySecretKey
 LOG_LEVEL=info
+SMTP_URL=smtp.gmail.com:587
+SMTP_FROM=...@gmail.com
+SMTP_PASS=...
 ```
 
 main.go
@@ -71,6 +74,9 @@ Preconfigured [routes](https://github.com/bonnevoyager/basicserver/blob/master/r
 
 - [POST /register](https://github.com/bonnevoyager/basicserver/blob/master/register_post.go)
 - [POST /signin](https://github.com/bonnevoyager/basicserver/blob/master/signin_post.go)
+- [GET /recover](https://github.com/bonnevoyager/basicserver/blob/master/recover_get.go)
+- [POST /recover](https://github.com/bonnevoyager/basicserver/blob/master/recover_post.go)
+- [POST /change](https://github.com/bonnevoyager/basicserver/blob/master/change_post.go)
 - [DELETE /account](https://github.com/bonnevoyager/basicserver/blob/master/account_delete.go)
 - [GET /keepalive](https://github.com/bonnevoyager/basicserver/blob/master/keepalive_get.go)
 - [POST /api/data](https://github.com/bonnevoyager/basicserver/blob/master/data_post.go)

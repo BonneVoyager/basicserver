@@ -8,7 +8,7 @@ import (
 
 // ServeFileGet serves
 // Method:   GET
-// Resource: http://localhost/api/file
+// Resource: http://localhost/api/file/{id:string}
 //
 // This resource requires `Authorization` header, e.g.:
 //
