@@ -2,7 +2,6 @@ package basicserver
 
 import (
 	"errors"
-	"log"
 
 	"github.com/globalsign/mgo/bson"
 	"github.com/kataras/iris"
@@ -38,9 +37,8 @@ type changeInput struct {
 //
 func (app *BasicApp) ServeChangePasswordPut() iris.Handler {
 	return func(ctx iris.Context) {
-		var formInput changeInput
+		var formInput, jsonInput changeInput
 		err := ctx.ReadForm(&formInput)
-		var jsonInput changeInput
 		err = ctx.ReadJSON(&jsonInput)
 
 		var inputPassword string
@@ -71,8 +69,6 @@ func (app *BasicApp) ServeChangePasswordPut() iris.Handler {
 			}
 			return
 		}
-		log.Println(inputPassword)
-		log.Println(inputCode)
 
 		passByte := []byte(inputPassword)
 		passEnc, err := bcrypt.GenerateFromPassword(passByte, bcrypt.DefaultCost)

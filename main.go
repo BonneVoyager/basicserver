@@ -89,11 +89,21 @@ func CreateApp(settings *Settings) *BasicApp {
 	}
 	db := session.DB("")
 
+	usersC := db.C(usersCollection)
+	statesC := db.C(statesCollection)
+	filesC := db.GridFS(filesCollection)
+
+	usersC.EnsureIndex(mgo.Index{
+		Key:        []string{"recovery_code"},
+		Unique:     true,
+		Background: true,
+	})
+
 	app := &BasicApp{
 		Coll: &collections{
-			Users:  db.C(usersCollection),
-			States: db.C(statesCollection),
-			Files:  db.GridFS(filesCollection),
+			Users:  usersC,
+			States: statesC,
+			Files:  filesC,
 		},
 		Db:       db,
 		Iris:     iris.Default(),

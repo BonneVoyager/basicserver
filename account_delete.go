@@ -2,7 +2,6 @@ package basicserver
 
 import (
 	"errors"
-	"log"
 
 	"github.com/globalsign/mgo/bson"
 	"github.com/kataras/iris"
@@ -36,7 +35,6 @@ func (app *BasicApp) ServeRemoveAccountDelete() iris.Handler {
 
 		// remove all user files
 		filenamePrefix := "^" + uid + ":"
-		log.Println(filenamePrefix)
 		var item fileItem
 		iter := app.Coll.Files.Find(bson.M{"filename": bson.RegEx{Pattern: filenamePrefix}}).Iter()
 		for iter.Next(&item) {

@@ -35,9 +35,8 @@ type recoverInput struct {
 //
 func (app *BasicApp) ServeRecoverPasswordPost() iris.Handler {
 	return func(ctx iris.Context) {
-		var formInput recoverInput
+		var formInput, jsonInput recoverInput
 		err := ctx.ReadForm(&formInput)
-		var jsonInput recoverInput
 		err = ctx.ReadJSON(&jsonInput)
 
 		var inputEmail string
