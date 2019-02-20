@@ -99,6 +99,13 @@ func CreateApp(settings *Settings) *BasicApp {
 		Background: true,
 	})
 
+	filesC.Files.EnsureIndex(mgo.Index{
+		Key:        []string{"filename"},
+		Unique:     true,
+		DropDups:   true,
+		Background: true,
+	})
+
 	app := &BasicApp{
 		Coll: &collections{
 			Users:  usersC,
