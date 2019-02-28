@@ -2,6 +2,7 @@ package basicserver
 
 import (
 	"log"
+	"strconv"
 	"time"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -72,17 +73,26 @@ func (app *BasicApp) ServeSigninPost() iris.Handler {
 			return
 		}
 
-		expiresAt := time.Now().Add(time.Hour * time.Duration(72)).Unix() // 72 hours
-		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		timeNow := time.Now()
+		expiresAt := timeNow.Add(time.Hour * time.Duration(72)).Unix() // 72 hours
+		claimsMap := jwt.MapClaims{
 			"uid": user.ID.Hex(),
 			"exp": expiresAt,
-		})
+		}
+		if app.Settings.SingleLogin { // single login value
+			claimsMap["sl"] = strconv.FormatInt(timeNow.Unix(), 10)
+		}
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claimsMap)
 		tokenString, err := token.SignedString(app.Settings.Secret)
 		if err != nil {
 			log.Print(err)
 			app.HandleError(err, ctx, iris.StatusInternalServerError)
 			return
 		}
+
+		app.Coll.Users.UpdateId(user.ID, bson.M{
+			"$set": bson.M{"last_login_at": timeNow},
+		})
 
 		ctx.JSON(iris.Map{
 			"expires": expiresAt,

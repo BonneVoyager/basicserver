@@ -32,10 +32,14 @@ func (app *BasicApp) ServeKeepAliveGet() iris.Handler {
 		uid := ctx.Values().Get("uid").(string)
 
 		expiresAt := time.Now().Add(time.Hour * time.Duration(72)).Unix() // 72 hours
-		token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		claimsMap := jwt.MapClaims{
 			"uid": uid,
 			"exp": expiresAt,
-		})
+		}
+		token := jwt.NewWithClaims(jwt.SigningMethodHS256, claimsMap)
+		if app.Settings.SingleLogin { // substain single login value
+			claimsMap["sl"] = ctx.Values().Get("sl").(string)
+		}
 		tokenString, err := token.SignedString(app.Settings.Secret)
 		if err != nil {
 			log.Print(err)

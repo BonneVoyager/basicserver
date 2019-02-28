@@ -2,21 +2,25 @@ package basicserver
 
 import (
 	"math/rand"
+	"time"
 
 	"github.com/globalsign/mgo/bson"
 )
 
 // User is an user data entity:
 //
-//    `ID` is user uid
+//    `ID` user uid
 //    `Email` user email
 //    `Password` encrypted password
+//    `RecoveryCode` optional recovery code for password reset
+//    `LastLoginAt` time at which last login happened
 //
 type User struct {
 	ID           bson.ObjectId `bson:"_id" json:"id"`
 	Email        string        `bson:"email"`
 	Password     string        `bson:"password"`
 	RecoveryCode string        `bson:"recovery_code"`
+	LastLoginAt  time.Time     `bson:"last_login_at"`
 }
 
 var codeLetters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")

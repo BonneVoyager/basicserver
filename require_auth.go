@@ -2,6 +2,7 @@ package basicserver
 
 import (
 	"errors"
+	"strconv"
 	"strings"
 
 	jwt "github.com/dgrijalva/jwt-go"
@@ -17,6 +18,8 @@ import (
 //
 // In case of invalid/expired token, this returns status code `401` and `text/plain`
 // error message as a response.
+//
+// In case of single login enabled and locked token provided, this returns status code `409`.
 //
 func (app *BasicApp) RequireAuth() iris.Handler {
 	return func(ctx iris.Context) {
@@ -55,10 +58,19 @@ func (app *BasicApp) RequireAuth() iris.Handler {
 				app.HandleError(err, ctx, iris.StatusInternalServerError)
 			}
 			return
+		} else if app.Settings.SingleLogin && // handle single login
+			strconv.FormatInt(user.LastLoginAt.Unix(), 10) != token.Claims.(jwt.MapClaims)["sl"] {
+			err := errors.New("Token Locked")
+			app.HandleError(err, ctx, iris.StatusConflict)
+			return
 		}
 
 		// pass on the "uid"
 		ctx.Values().Set("uid", uid)
+		if app.Settings.SingleLogin {
+			sl := token.Claims.(jwt.MapClaims)["sl"]
+			ctx.Values().Set("sl", sl)
+		}
 		ctx.Next()
 	}
 }

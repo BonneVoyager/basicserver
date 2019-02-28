@@ -1,6 +1,7 @@
 package basicserver
 
 import (
+	"strconv"
 	"testing"
 	"time"
 
@@ -307,4 +308,41 @@ func TestApiFile(t *testing.T) {
 	removeTestState()
 
 	app.Coll.Files.Remove(testUID.Hex() + ":golang.jpg")
+}
+
+func TestSingleLogin(t *testing.T) {
+	e := httptest.New(t, app.Iris)
+
+	app.Settings.SingleLogin = true
+
+	createTestUser()
+
+	timeNow := time.Now()
+	expiresAt := timeNow.Add(time.Minute * time.Duration(1)).Unix()
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"uid": testUID.Hex(),
+		"exp": expiresAt,
+		"sl":  strconv.FormatInt(timeNow.Unix(), 10),
+	})
+	tokenString, _ := token.SignedString([]byte(testSecret))
+
+	app.Coll.Users.UpdateId(testUID, bson.M{
+		"$set": bson.M{"last_login_at": timeNow},
+	})
+
+	e.GET("/api/data").
+		WithHeader("Authorization", "Bearer "+tokenString).
+		Expect().Status(httptest.StatusOK)
+
+	app.Coll.Users.UpdateId(testUID, bson.M{
+		"$set": bson.M{"last_login_at": timeNow.Add(time.Minute)},
+	})
+
+	e.GET("/api/data").
+		WithHeader("Authorization", "Bearer "+tokenString).
+		Expect().Status(httptest.StatusConflict)
+
+	removeTestUser()
+
+	app.Settings.SingleLogin = false
 }

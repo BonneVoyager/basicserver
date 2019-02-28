@@ -33,6 +33,7 @@ type SMTPSettings struct {
 //   `LogLevel` - available values are: "disable", "fatal", "error", "warn", "info", "debug"
 //   `MongoString` - URI format described at http://docs.mongodb.org/manual/reference/connection-string/
 //   `Secret` - secret value used by JWT parser
+//   `SingleLogin` - allows to access restricted resources only with fresh token received from signin
 //   `ServerPort` - port on which the server should listen to
 //   `RecoverTemplate` - html content to be sent along with password recovery email
 //   `SMTP` - SMTP configuration to send emails
@@ -41,6 +42,7 @@ type Settings struct {
 	LogLevel        string
 	MongoString     string
 	Secret          []byte
+	SingleLogin     bool
 	ServerPort      string
 	RecoverTemplate string
 	SMTP            SMTPSettings
