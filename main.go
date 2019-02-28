@@ -95,7 +95,6 @@ func CreateApp(settings *Settings) *BasicApp {
 
 	usersC.EnsureIndex(mgo.Index{
 		Key:        []string{"recovery_code"},
-		Unique:     true,
 		Background: true,
 	})
 

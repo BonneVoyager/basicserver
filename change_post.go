@@ -41,13 +41,12 @@ func (app *BasicApp) ServeChangePasswordPut() iris.Handler {
 		err := ctx.ReadForm(&formInput)
 		err = ctx.ReadJSON(&jsonInput)
 
-		var inputPassword string
+		var inputPassword, inputCode string
 		if formInput.Password != "" {
 			inputPassword = formInput.Password
 		} else if jsonInput.Password != "" {
 			inputPassword = jsonInput.Password
 		}
-		var inputCode string
 		if formInput.Code != "" {
 			inputCode = formInput.Code
 		} else if jsonInput.Code != "" {
