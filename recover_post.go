@@ -101,6 +101,7 @@ func (app *BasicApp) ServeRecoverPasswordPost() iris.Handler {
 		if err := d.DialAndSend(m); err != nil {
 			log.Println(err)
 			app.HandleError(err, ctx, iris.StatusInternalServerError)
+			return
 		}
 
 		ctx.WriteString("Recovery Email sent. Check your inbox.")
