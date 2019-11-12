@@ -3,7 +3,7 @@ package basicserver
 import (
 	"log"
 
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 
 	mgo "github.com/globalsign/mgo"
 )

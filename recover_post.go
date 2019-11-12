@@ -4,7 +4,7 @@ import (
 	"log"
 
 	"github.com/globalsign/mgo/bson"
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 	gomail "gopkg.in/gomail.v2"
 )
 

@@ -2,7 +2,7 @@ package basicserver
 
 import (
 	"github.com/globalsign/mgo/bson"
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 )
 
 // ServeDataGet serves

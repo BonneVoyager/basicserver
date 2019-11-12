@@ -3,7 +3,7 @@ package basicserver
 import (
 	"time"
 
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 )
 
 // ServeFileGet serves
