@@ -3,7 +3,7 @@ package basicserver
 import (
 	"io"
 
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 )
 
 // ServeFilePost serves

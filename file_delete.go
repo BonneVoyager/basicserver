@@ -4,7 +4,7 @@ import (
 	"errors"
 
 	"github.com/globalsign/mgo/bson"
-	"github.com/kataras/iris"
+	"github.com/kataras/iris/v12"
 )
 
 // ServeFileDelete serves
